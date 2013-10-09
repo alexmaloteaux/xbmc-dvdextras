@@ -63,6 +63,30 @@ file that needs modified is DialogVideoInfo.xml.  This is the code I added to th
 </control>
 ```                                             
 
+### Enabling Extras per seasons for TVShows
+List of seasons are handled sighty differently then episodes or tvshows list as explained here : http://forum.xbmc.org/showthread.php?tid=58154  
+It is possible to enable the Extras button in the DialogVideoInfo per season and not per episodes for TVShows. However to get it working you need to apply strictly those 3 steps
+* Set [XBMC]->[Settings]->[Videos]->[Library]->[Flatten TV Shows] to Never
+
+* You need to name your season folders based on the label used by your localization for the seasons list.
+  For instance if using Transparency skin with english localization, your seasons will appear as "Season 1", "Season 2", ...
+  Then for any TVShow, your Folder structure will be like :
+	...MyTVSHOWS_NAME/Season 1/Extras/...
+	...MyTVSHOWS_NAME/Season 2/Extras/...
+
+* Finally configure the extras button like this :
+```xml
+<control type="button" id="100">
+    <description>Extras</description>
+    <include>DialogVideoInfoButton</include>
+    <label>Extras</label>
+    <onclick condition="[ Container.Content(tvshows) + !StringCompare(Container.FolderPath,videodb://2/2/) ]">XBMC.RunScript(script.dvdextras,$INFO[ListItem.FilenameAndPath]$INFO[ListItem.Label]/)</onclick>
+    <onclick condition="![ Container.Content(tvshows) + !StringCompare(Container.FolderPath,videodb://2/2/) ]">XBMC.RunScript(script.dvdextras,$INFO[ListItem.FilenameAndPath])</onclick>
+    <visible>[Container.Content(movies) | [ Container.Content(tvshows) + !StringCompare(Container.FolderPath,videodb://2/2/) ] | Container.Content(MusicVideos)] + System.HasAddon(script.dvdextras)</visible>
+</control>					
+```  
+
+
 ### Other
 After playing around with the script I decided that I personally liked having extras that appeared at the end of a Season to appear in the format "Bonus: Behind the Scenes". Since
 adding a colon in a filename can be a problem the script supports the html code &amp;#58; for colon.  So if you create a file with that code in it it will display as a colon in the UI.
