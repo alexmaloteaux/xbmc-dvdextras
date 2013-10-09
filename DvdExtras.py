@@ -242,7 +242,7 @@ class DvdExtras(xbmcgui.Window):
         fileWoExt = os.path.splitext( os.path.basename( filepath ) )[0]
         pattern = fileWoExt + "-extras-"
         for file in files:
-            m = re.search(pattern + ".*", file)
+            m = re.search(re.escape(pattern) + ".*", file)
             if m:
                 path = os.path.join( directory, file )
                 displayName = os.path.splitext(file[len(pattern):])[0]
