@@ -229,10 +229,11 @@ class DvdExtras(xbmcgui.Window):
         if xbmcvfs.exists( extrasDir ):
             dirs, files = xbmcvfs.listdir( extrasDir )
             for filename in files:
-                log( "found file: " )
-                log( filename[0] )
-                orderDisplay = self.getOrderAndDisplay( os.path.splitext(filename)[0] )
-                extras.append( ( extrasDir + filename, orderDisplay[0], orderDisplay[1] ) )
+		if os.path.splitext(filename)[1] in ( '.mkv', '.avi', '.mp4', '.flv', '.wmv', '.3gp', '.asf', '.mov', '.rm', '.swf' ):
+                  log( "found file: " )
+                  log( filename[0] )
+                  orderDisplay = self.getOrderAndDisplay( os.path.splitext(filename)[0] )
+                  extras.append( ( extrasDir + filename, orderDisplay[0], orderDisplay[1] ) )
         return extras
         
     def getExtrasFiles(self, filepath):
